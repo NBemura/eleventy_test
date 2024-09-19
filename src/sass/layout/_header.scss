@@ -1,0 +1,22 @@
+.l-header {
+  padding: 24px;
+  background: #000000;
+  color: #ffffff;
+}
+
+.c-navi-list {
+  display: flex;
+  justify-content: center;
+  gap: 0 8px;
+}
+.c-navi-list__link {
+  display: block;
+  padding: 16px;
+  background: #222222;
+  border-radius: 8px;
+  color: #ffffff;
+  text-decoration: none;
+  &:hover {
+    background: #444444;
+  }
+}
