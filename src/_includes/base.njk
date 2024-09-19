@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head class="l-header">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title }}</title>
+    <link rel="stylesheet" href="/css/common.css">
+    {{ css }}
+</head>
+<body>
+{% include "components/header.njk" %}
+
+<main>
+{{ content | safe }}
+</main>
+
+{% include "components/footer.njk" %}
+
+<script src="/scripts.js"></script>
+</body>
+</html>

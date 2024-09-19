@@ -1,12 +1,29 @@
-const eleventySass = require('eleventy-sass')
-
 module.exports = (eleventyConfig) => {
-  // `src/images` フォルダの内容を `_site/images` にコピーする
-  eleventyConfig.addPassthroughCopy('src/images')
+  const eleventySass = require('eleventy-sass')
 
   // eleventy-sass プラグインを追加
   eleventyConfig.addPlugin(eleventySass, {
-    watch: ['src/sass/**/*.scss'],
-    outputDir: '_site/css'
+    compileOptions: {
+      // コンパイル先のフォルダ名をcssに変換
+      permalink: function (contents, inputPath) {
+        return (data) =>
+          data.page.filePathStem.replace(/^\/sass\//, '/css/') + '.css'
+      }
+    },
+    // SASSの設定
+    sass: {
+      style: 'expanded',
+      sourceMap: true
+    }
   })
+
+  // 画像フォルダを出力ディレクトリに複製
+  eleventyConfig.addPassthroughCopy('src/images')
+
+  return {
+    dir: {
+      input: 'src', // 入力ディレクトリ
+      output: 'dist' // 出力ディレクトリ
+    }
+  }
 }
