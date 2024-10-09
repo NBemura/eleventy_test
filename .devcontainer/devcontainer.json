@@ -1,0 +1,13 @@
+{
+  "name": "eleventy-test",
+  "image": "node:18.18-bullseye-slim",
+  "postCreateCommand": "npm install -g npm@latest",
+  "customizations": {
+    "vscode": {
+      "settings": {
+        "editor.formatOnSave": true
+      },
+      "extensions": ["esbenp.prettier-vscode"]
+    }
+  }
+}
