@@ -1,11 +1,13 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ja">
 <head class="l-header">
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ title }}</title>
-    <link rel="stylesheet" href="/css/common.css">
-    {{ css }}
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ title }}</title>
+  <link rel="stylesheet" href="./css/common.css">
+  {% if css %}
+  <link rel="stylesheet" href="{{ css }}">
+  {% endif %}
 </head>
 <body>
 {% include "components/header.njk" %}
@@ -16,6 +18,6 @@
 
 {% include "components/footer.njk" %}
 
-<script src="/scripts.js"></script>
+<script src="./js/common.js"></script>
 </body>
 </html>
