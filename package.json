@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
+    "check:accessibility": "node scripts/accessibility-check.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "clean": "rm -rf dist",
     "build": "npm run clean && eleventy",
@@ -16,5 +17,9 @@
     "@11ty/eleventy": "^2.0.1",
     "eleventy-sass": "^2.2.6",
     "prettier": "^3.3.3"
+  },
+  "dependencies": {
+    "axe-core": "^4.10.2",
+    "axe-playwright": "^2.0.3"
   }
 }
