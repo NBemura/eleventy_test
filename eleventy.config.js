@@ -20,6 +20,9 @@ module.exports = (eleventyConfig) => {
   // 画像フォルダを出力ディレクトリに複製
   eleventyConfig.addPassthroughCopy('src/images')
 
+  // JavaScriptファイル（common.js）を出力ディレクトリにコピー
+  eleventyConfig.addPassthroughCopy('src/js')
+
   return {
     dir: {
       input: 'src', // 入力ディレクトリ
