@@ -1,6 +1,7 @@
-module.exports = (eleventyConfig) => {
-  const eleventySass = require('eleventy-sass')
+const eleventySass = require('eleventy-sass')
+const sitemap = require('@quasibit/eleventy-plugin-sitemap')
 
+module.exports = (eleventyConfig) => {
   // eleventy-sass プラグインを追加
   eleventyConfig.addPlugin(eleventySass, {
     compileOptions: {
@@ -14,6 +15,13 @@ module.exports = (eleventyConfig) => {
     sass: {
       style: 'expanded',
       sourceMap: true
+    }
+  })
+
+  // eleventy-plugin-sitemap プラグインを追加
+  eleventyConfig.addPlugin(sitemap, {
+    sitemap: {
+      hostname: 'http://localhost:8080' // サイトのホスト名を指定
     }
   })
 
