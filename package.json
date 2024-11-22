@@ -3,17 +3,20 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "clean": "rm -rf dist",
     "build": "npm run clean && eleventy",
     "serve": "eleventy --serve",
-    "watch": "eleventy --watch"
+    "watch": "eleventy --watch",
+    "test:a11y": "playwright test ./tests/accessibility.spec.js"
   },
   "author": "",
   "license": "ISC",
   "description": "",
   "devDependencies": {
     "@11ty/eleventy": "^2.0.1",
+    "@axe-core/playwright": "^4.10.1",
+    "@playwright/test": "^1.49.0",
+    "@types/node": "^22.9.1",
     "eleventy-sass": "^2.2.6",
     "prettier": "^3.3.3"
   }
