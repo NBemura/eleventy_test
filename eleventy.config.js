@@ -1,7 +1,26 @@
+// require('fs')はnodeのファイルシステム（File System）モジュール
+const fs = require('fs')
 const eleventySass = require('eleventy-sass')
-const sitemap = require('@quasibit/eleventy-plugin-sitemap')
 
 module.exports = (eleventyConfig) => {
+  eleventyConfig.addCollection('allPages', (collection) => {
+    // collection.getAllSorted()で全てのファイルを取得→filterで.htmlで終わるファイルのみをソート
+    const pages = collection
+      .getAllSorted()
+      .filter((item) => item.url === '/' || item.url.endsWith('.html'))
+
+    // サイトマップをJSONファイルとして保存
+    fs.writeFileSync(
+      './dist/site-map.json',
+      JSON.stringify(
+        pages.map((page) => page.url),
+        null, // 置換処理
+        2 // インデント
+      )
+    )
+    return pages
+  })
+
   // eleventy-sass プラグインを追加
   eleventyConfig.addPlugin(eleventySass, {
     compileOptions: {
@@ -15,13 +34,6 @@ module.exports = (eleventyConfig) => {
     sass: {
       style: 'expanded',
       sourceMap: true
-    }
-  })
-
-  // eleventy-plugin-sitemap プラグインを追加
-  eleventyConfig.addPlugin(sitemap, {
-    sitemap: {
-      hostname: 'http://localhost:8080' // サイトのホスト名を指定
     }
   })
 

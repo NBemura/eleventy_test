@@ -16,11 +16,10 @@
   "devDependencies": {
     "@11ty/eleventy": "^2.0.1",
     "@quasibit/eleventy-plugin-sitemap": "^2.2.0",
-    "eleventy-sass": "^2.2.6",
-    "prettier": "^3.3.3"
-  },
-  "dependencies": {
     "axe-core": "^4.10.2",
-    "axe-playwright": "^2.0.3"
+    "axe-playwright": "^2.0.3",
+    "eleventy-sass": "^2.2.6",
+    "playwright": "^1.49.0",
+    "prettier": "^3.3.3"
   }
 }
