@@ -1,23 +1,29 @@
 const fs = require('fs')
 const { chromium } = require('playwright')
 const AxeBuilder = require('@axe-core/playwright').default
+const { createHtmlReport } = require('axe-html-reporter')
 
-// ファイルの読み込み
+// サイトマップを読み込む
 const sitemap = JSON.parse(fs.readFileSync('./dist/site-map.json'))
 
 async function runAccessibilityTests() {
-  // Playwrightでブラウザ立ち上げ
   const browser = await chromium.launch()
   const context = await browser.newContext()
   const page = await context.newPage()
 
+  // 結果を収集
+  const allResults = {
+    violations: [],
+    passes: [],
+    incomplete: [],
+    inapplicable: []
+  }
+
   for (const url of sitemap) {
     console.log(`Checking: ${url}`)
-
-    // ページに移動
     await page.goto(`http://localhost:8080${url}`)
 
-    // チェックの設定
+    // Axeによるチェック
     const results = await new AxeBuilder({ page })
       .withTags(['wcag2a', 'wcag2aa'])
       .options({
@@ -27,47 +33,35 @@ async function runAccessibilityTests() {
       })
       .analyze()
 
-    // チェックの内容
-    if (results.violations.length > 0) {
-      console.error(`😺 ${url} `)
-      results.violations.forEach((violation) => {
-        console.error(` 🐭問題： ${violation.id}: ${violation.help}`)
-        console.error(` 重要度： ${violation.impact}`)
-        violation.nodes.forEach((node) => {
-          console.error(`  └ 該当箇所： ${node.html}`)
-          // console.error(`  └ 修正ポイント： ${node.failureSummary}`)
-        })
-      })
-    } else {
-      console.log(`🙆‍♂️問題ありません ${url}`)
-    }
+    allResults.violations.push(...results.violations)
+    allResults.passes.push(...results.passes)
+    allResults.incomplete.push(...results.incomplete)
+    allResults.inapplicable.push(...results.inapplicable)
 
-    // フォームのラベルチェック
-    // withRules(['label'])がwithTagsを上書きしてしまうため個別にチェック
-    // …と思ったらなんかちゃんと動いてた
-    // const labelViolations = results.violations.filter(
-    //   (violation) =>
-    //     violation.id === 'label' ||
-    //     violation.id === 'form-field-multiple-labels'
-    // )
-    // if (labelViolations.length > 0) {
-    //   console.log('😺inputのラベルがありません')
-    //   labelViolations.forEach((violation) => {
-    //     console.log(` 🐭問題： ${violation.help}`)
-    //     console.log(` 重要度： ${violation.impact}`)
-    //     violation.nodes.forEach((node) => {
-    //       console.log(`  └ 該当箇所: ${node.html}`)
-    //       // console.log(`  └ 修正ポイント: ${node.failureSummary}`)
-    //     })
-    //     console.log('---')
-    //   })
-    // }
+    if (results.violations.length > 0) {
+      console.error(`❌ 問題が見つかりました ${url}`)
+    } else {
+      console.log(`✅ 問題ありません ${url}`)
+    }
   }
+
+  // HTMLレポートの生成
+  const reportHtml = createHtmlReport({
+    results: allResults,
+    options: {
+      projectKey: 'Accessibility Report'
+    }
+  })
+
+  // レポートをファイルに保存
+  const reportPath = './artifacts/accessibilityReport.html'
+  fs.writeFileSync(reportPath, reportHtml)
+  console.log(`📄 レポートを生成しました: ${reportPath}`)
 
   await browser.close()
 }
 
 runAccessibilityTests().catch((error) => {
-  console.error('🚨テスト中にエラーが起こりました', error.message)
+  console.error('🚨 テスト中にエラーが起こりました:', error.message)
   console.error(error.stack)
 })

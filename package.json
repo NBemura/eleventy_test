@@ -17,6 +17,7 @@
     "@11ty/eleventy": "^2.0.1",
     "@axe-core/playwright": "^4.10.1",
     "@playwright/test": "^1.49.0",
+    "axe-html-reporter": "^2.2.11",
     "eleventy-sass": "^2.2.6",
     "prettier": "^3.3.3"
   }
