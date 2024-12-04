@@ -58,6 +58,11 @@ async function runAccessibilityTests() {
   fs.writeFileSync(reportPath, reportHtml)
   console.log(`📄 レポートを生成しました: ${reportPath}`)
 
+  // ブラウザでレポートを開く
+  console.log('🌐 レポートをブラウザで開きます...')
+  const open = (await import('open')).default
+  await open(reportPath, { app: { name: 'google chrome' } })
+
   await browser.close()
 }
 
