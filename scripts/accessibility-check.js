@@ -5,8 +5,8 @@ const AxeBuilder = require('@axe-core/playwright').default
 // ファイルの読み込み
 const sitemap = JSON.parse(fs.readFileSync('./dist/site-map.json'))
 
-// アクセシビリティチェックを実行
 async function runAccessibilityTests() {
+  // Playwrightでブラウザ立ち上げ
   const browser = await chromium.launch()
   const context = await browser.newContext()
   const page = await context.newPage()
@@ -17,6 +17,7 @@ async function runAccessibilityTests() {
     // ページに移動
     await page.goto(`http://localhost:8080${url}`)
 
+    // チェックの設定
     const results = await new AxeBuilder({ page })
       .withTags(['wcag2a', 'wcag2aa'])
       .options({
@@ -26,6 +27,7 @@ async function runAccessibilityTests() {
       })
       .analyze()
 
+    // チェックの内容
     if (results.violations.length > 0) {
       console.error(`😺 ${url} `)
       results.violations.forEach((violation) => {
@@ -40,7 +42,9 @@ async function runAccessibilityTests() {
       console.log(`🙆‍♂️問題ありません ${url}`)
     }
 
-    // フォームのラベルチェック（withRules(['label'])がwithTagsを上書きしてしまうため個別にチェック）
+    // フォームのラベルチェック
+    // withRules(['label'])がwithTagsを上書きしてしまうため個別にチェック
+    // …と思ったらなんかちゃんと動いてた
     // const labelViolations = results.violations.filter(
     //   (violation) =>
     //     violation.id === 'label' ||
