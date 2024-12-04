@@ -1,5 +1,25 @@
+// require('fs')はnodeのファイルシステム（File System）モジュール
+const fs = require('fs')
+const eleventySass = require('eleventy-sass')
+
 module.exports = (eleventyConfig) => {
-  const eleventySass = require('eleventy-sass')
+  eleventyConfig.addCollection('allPages', (collection) => {
+    // collection.getAllSorted()で全てのファイルを取得→filterで.htmlで終わるファイルのみをソート
+    const pages = collection
+      .getAllSorted()
+      .filter((item) => item.url === '/' || item.url.endsWith('.html'))
+
+    // サイトマップをJSONファイルとして保存
+    fs.writeFileSync(
+      './dist/site-map.json',
+      JSON.stringify(
+        pages.map((page) => page.url),
+        null, // 置換処理
+        2 // インデント
+      )
+    )
+    return pages
+  })
 
   // eleventy-sass プラグインを追加
   eleventyConfig.addPlugin(eleventySass, {
